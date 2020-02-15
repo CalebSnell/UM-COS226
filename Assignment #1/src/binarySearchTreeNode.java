@@ -4,53 +4,95 @@ public class binarySearchTreeNode<T> {
     private binarySearchTreeNode<T> left;
     private binarySearchTreeNode<T> right;
 
-    public binarySearchTreeNode() {
+    binarySearchTreeNode() {
         element = null;
         left = null;
         right = null;
     }
 
-    public binarySearchTreeNode(T element) {
+    public binarySearchTreeNode(T element, binarySearchTreeNode<T> left, binarySearchTreeNode<T> right){
         this.element = element;
+        this.left = left;
+        this.right = right;
     }
 
 
     //----getters----//
-    public T getElement() {
+    T getElement() {
         return element;
     }
-    public binarySearchTreeNode<T> getLeft() {
+    private binarySearchTreeNode<T> getLeft() {
         return left;
     }
-    public binarySearchTreeNode<T> getRight() {
+    private binarySearchTreeNode<T> getRight() {
         return right;
     }
-    public int getSize() {
-        return size(this);
-
+    public int getSize(){
+        if (this.isLeaf()) {
+            return 1;
+        } else if (this.getLeft() != null && this.getRight() == null) {
+            return this.getLeft().getSize() + 1;
+        } else if (this.getLeft() == null && this.getRight() != null) {
+            return this.getRight().getSize() + 1;
+        } else {
+            return this.getLeft().getSize() + 1 + this.getRight().getSize();
+        }
     }
-    public int size(binarySearchTreeNode<T> node){
-        // Return 0 if no descendants
-        if (node == null) {
+    private boolean isLeaf() {
+        return this.getLeft() == null && this.getRight() == null;
+    }
+    public int getHeight() {
+        if (this.isLeaf()) {
             return 0;
+        } else if (this.getLeft() != null && this.getRight() == null) {
+            return this.getLeft().getHeight() + 1;
+        } else if (this.getLeft() == null && this.getRight() != null) {
+            return this.getRight().getHeight() + 1;
+        } else {
+            return Math.max(this.getLeft().getHeight(), this.getRight().getHeight()) + 1;
         }
-        // Recurse through, adding 1 each time
-        else {
-            return size(node.getLeft()) + 1 + size(node.getRight());
-        }
-    }
-    public int getHeight(binarySearchTreeNode<T> node){
-        return 0;
     }
 
     //----setters----//
-    public void setElement(T element) {
+    void setElement(T element) {
         this.element = element;
     }
-    public void setLeft(binarySearchTreeNode<T> left) {
+    void setLeft(binarySearchTreeNode<T> left) {
         this.left = left;
     }
-    public void setRight(binarySearchTreeNode<T> right){
+    void setRight(binarySearchTreeNode<T> right){
         this.right = right;
+    }
+
+    //----misc----//
+    void printPreorder(binarySearchTreeNode<T> node) {
+        //PRE: TreeNode object of generic type
+        //POST: Prints element of each tree node in postorder
+        // Drop out of recursion when we hit a leaf node
+        if (node == null) {
+            return;
+        }
+        // Print element only if contains valid data
+        if (node.getElement() != null) {
+            System.out.println(node.getElement());
+        }
+        // Recurse through tree
+        printPreorder(node.getLeft());
+        printPreorder(node.getRight());
+    }
+    void printPostorder(binarySearchTreeNode<T> node) {
+        //PRE: TreeNode object of generic type
+        //POST: Prints element of each tree node in postorder
+        // Drop out of recursion when we hit a leaf node
+        if (node == null) {
+            return;
+        }
+        // Recurse through tree
+        printPostorder(node.getLeft());
+        printPostorder(node.getRight());
+        // Print element only if contains valid data
+        if (node.getElement() != null) {
+            System.out.println(node.getElement());
+        }
     }
 }
